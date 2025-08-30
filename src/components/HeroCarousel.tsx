@@ -3,7 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Autoplay from "embla-carousel-autoplay";
+
+
+{/* Autoplay({
+            delay: 6000,
+            stopOnInteraction: true,
+            stopOnMouseEnter: true,
+          }), */}
 
 import {
   Carousel,
@@ -55,11 +61,7 @@ export default function HeroCarousel() {
     <div>
       <Carousel
         plugins={[
-          Autoplay({
-            delay: 6000,
-            stopOnInteraction: true,
-            stopOnMouseEnter: true,
-          }),
+          
         ]}
         setApi={setApi}
         className="w-full"
@@ -70,7 +72,7 @@ export default function HeroCarousel() {
             <CarouselItem key={s.id}>
               <div className="group relative w-full">
                 {/* Background image */}
-                <div className="relative w-full h-[56vh] min-h-[420px] ">
+                <div className="relative w-full h-[56vh] min-h-[480px] ">
                   <Image
                     src={s.img}
                     alt={s.title}
