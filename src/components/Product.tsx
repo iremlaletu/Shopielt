@@ -10,8 +10,8 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
+  
   const main = product.media?.mainMedia?.image;
-
   const second = product.media?.items?.[1]?.image
 
   return (
@@ -22,7 +22,7 @@ export default function Product({ product }: ProductProps) {
       <div className="relative overflow-hidden">
         <WixImage
           mediaIdentifier={main?.url}
-          alt={main?.altText ?? product.name}
+          alt={main?.altText}
           width={700}
           height={700}
           className="block transition-opacity duration-300 group-hover:opacity-0"

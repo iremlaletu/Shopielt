@@ -1,0 +1,53 @@
+import { Button } from "@/components/ui/button";
+import { Home, Mail, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+
+export default function NotFound() {
+  return (
+    <main className="mx-auto max-w-7xl space-y-8 px-5 py-10 text-center">
+      <div className="mx-auto w-36">
+        <svg
+          viewBox="0 0 48 48"
+          xmlns="http://www.w3.org/2000/svg"
+          className="text-muted-foreground h-auto w-full"
+        >
+          <title>location-not-found</title>
+          <g id="Layer_2" data-name="Layer 2">
+            <g id="invisible_box" data-name="invisible box">
+              <rect width="48" height="48" fill="none" />
+            </g>
+            <g id="icons_Q2" data-name="icons Q2">
+              <path d="M24,6c7.4,0,13,6,13,14S28.4,36.7,24,41.2C19.6,36.7,11,27.5,11,20S16.6,6,24,6m0-4C14.1,2,7,10.1,7,20S18.5,41.3,22.6,45.4a1.9,1.9,0,0,0,2.8,0C29.5,41.3,41,30.1,41,20S33.9,2,24,2Z" />
+              <path d="M24,10a9,9,0,1,0,9,9A9,9,0,0,0,24,10Zm0,4a5.7,5.7,0,0,1,1.8.3l-6.4,6.5A3.7,3.7,0,0,1,19,19,5,5,0,0,1,24,14Zm0,10a5.7,5.7,0,0,1-1.8-.3l6.4-6.5A3.7,3.7,0,0,1,29,19,5,5,0,0,1,24,24Z" />
+            </g>
+          </g>
+        </svg>
+      </div>
+      <h1 className="text-3xl font-bold">Not Found</h1>
+      <p>
+        {" "}
+        The page you’re looking for might have been moved, renamed, or doesn’t
+        exist.{" "}
+      </p>
+      <div className="mx-auto grid w-full max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
+        <Button asChild size="lg" className="w-full">
+          <Link href="/" className="w-full">
+            <Home className="mr-2 h-4 w-4" /> Home
+          </Link>
+        </Button>
+
+        <Button asChild variant="secondary" size="lg" className="w-full">
+          <Link href="/shop" className="w-full">
+            <ShoppingBag className="mr-2 h-4 w-4" /> Browse products
+          </Link>
+        </Button>
+
+        <Button asChild variant="outline" size="lg" className="w-full">
+          <Link href="/contact" className="w-full">
+            <Mail className="mr-2 h-4 w-4" /> Contact us
+          </Link>
+        </Button>
+      </div>
+    </main>
+  );
+}

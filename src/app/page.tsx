@@ -33,16 +33,12 @@ async function FeaturedProducts() {
 
   if (!featuredProducts.items.length) return null;
   return (
-    <div className="space-y-5">
-      
+    <div className="space-y-5"> 
       <div className="flex flex-col gap-5 grid-cols-2 sm:grid md:grid-cols-3 lg:grid-cols-4">
         {featuredProducts.items.map((product) => (
           <Product key={product._id} product={product} />
         ))}
       </div>
-      <pre>
-        {JSON.stringify(featuredProducts.items, null, 2)}
-      </pre>
     </div>
   );
 }
@@ -50,7 +46,6 @@ async function FeaturedProducts() {
 function FeaturedProductsFallback() {
   return (
     <div className="space-y-5">
-      
       <div className="flex flex-col gap-5 grid-cols-2 sm:grid md:grid-cols-3 lg:grid-cols-4">
         {[...Array(8)].map((_, i) => (
           <ProductSkeleton key={i} />
