@@ -2,7 +2,8 @@ import HeroCarousel from "@/components/HeroCarousel";
 import Product from "@/components/Product";
 import ProductSkeleton from "@/components/ProductSkeleton";
 import { delay } from "@/lib/utils";
-import { getWixClient } from "@/lib/wix-client.base";
+import getCollectionsBySlug from "@/wix-api/collections";
+import queryProducts from "@/wix-api/products";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -16,20 +17,21 @@ export default function Home() {
   );
 }
 
+// getCollectionsBySlug and queryProducts are from wix-api folder which use wix-client.base.ts to get the wix client instance and fetch the actual data over there.
+// I put sepereate files for each api call to keep the code clean and easy to reuse with slug.
+
 async function FeaturedProducts() {
   await delay(3000);
 
-  const wixClient = getWixClient();
-  const { collection } =
-    await wixClient.collections.getCollectionBySlug("featured");
+  const collection = await getCollectionsBySlug("featured");
+
   if (!collection?._id) {
     return null;
   }
-  const featuredProducts = await wixClient.products
-    .queryProducts()
-    .hasSome("collectionIds", [collection._id])
-    .descending("lastUpdated")
-    .find();
+
+  // reuse the queryProducts function from wix-api/products.ts, passing the collection id to get the products in that collection.
+  // queryProducts will be reused in other places with different params. For here I need to get products in the "featured" collection.
+  const featuredProducts = await queryProducts({collectionIds: collection._id}); 
 
   if (!featuredProducts.items.length) return null;
   return (

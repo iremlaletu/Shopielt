@@ -5,10 +5,8 @@ import { Button } from "./ui/button";
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary text-foreground">
-      {/* ÜST KISIM */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-2 py-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-        {/* MARKA */}
+    <footer className="bg-secondary">
+      <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
         <div>
           <Link href="/" className="text-2xl font-semibold tracking-wide">
             Shopielt
