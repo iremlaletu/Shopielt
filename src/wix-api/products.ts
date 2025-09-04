@@ -6,6 +6,7 @@ interface QueryProductsFilter {
   collectionIds?: string[] | string;
   sort?: ProductsSort;
 }
+// reusable function to query products
 
 export default async function queryProducts({
   collectionIds,
@@ -38,7 +39,20 @@ export default async function queryProducts({
       break;
   }
 
-  return query.find();
+  return query.find(); // Execute the query and return the results
 }
 
-// reusable function to query products
+
+export async function getProductBySlug (slug: string ){
+  const wixClient = getWixClient();
+  const {items} = await wixClient.products.queryProducts() // this comes from wix client instance, builder pattern
+  .eq("slug", slug)
+  .limit(1) // Limit to 1 result since slug is unique
+  .find(); // execute the query
+
+  const product = items[0]; // Get the first item from the results
+  if(!product || !product.visible){
+    return null;
+  }
+  return product;
+}
