@@ -1,4 +1,5 @@
 import { getWixClient } from "@/lib/wix-client.base";
+import { cache } from "react";
 
 export type ProductsSort = "last_updated" | "price_asc" | "price_desc";
 
@@ -43,7 +44,10 @@ export default async function queryProducts({
 }
 
 
-export async function getProductBySlug (slug: string ){
+// purpose of cache function is to dedeuplicate the calls to this function with same argument(e.g. "slug/page.tsx")
+
+export const getProductBySlug = cache ( async (slug: string ) => {
+  console.log("Fetching product with slug:");
   const wixClient = getWixClient();
   const {items} = await wixClient.products.queryProducts() // this comes from wix client instance, builder pattern
   .eq("slug", slug)
@@ -55,4 +59,14 @@ export async function getProductBySlug (slug: string ){
     return null;
   }
   return product;
+} )
+
+{
+  /*
+  getProductBySlug with cache 
+  Multiple calls with the same slug during a single request are resolved from memory, not refetched
+  The cache function only works within the same request lifecycle (SSR/route handler).
+  For longer-lived caching (ISR, tag-based revalidation), should use unstable_cache() instead.
+  cache is usually enough to need to avoid duplicate fetches during rendering
+  */
 }

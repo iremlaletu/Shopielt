@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     absolute: "Shopielt",
-    template: "%s | Irem's Projects",
+    template: "%s | Shopielt Shop",
   },
   description: "full-stack e-commerce app built with Next.js",
 };
