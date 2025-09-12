@@ -2,7 +2,7 @@ import WixImage from "@/components/WixImage";
 import { cn } from "@/lib/utils";
 import { products } from "@wix/stores";
 import { PlayIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ProductMediaProps {
   media: products.MediaItem[] | undefined; // should be array, cause product can have multiple media items or not at all
@@ -10,7 +10,13 @@ interface ProductMediaProps {
 
 export default function ProductMedia({ media }: ProductMediaProps) {
   const [selectedMedia, setSelectedMedia] = useState(media?.[0]); // first image as default
+
+   useEffect(() => {
+    setSelectedMedia(media?.[0]);
+  }, [media]);
+
   if (!media?.length) return null; // no media to show
+
   const selectedImage = selectedMedia?.image;
   const selectedVideo = selectedMedia?.video?.files?.[0];
 
@@ -72,7 +78,7 @@ function MediaPreview({ mediaItem, isSelected, onSelect }: MediaPreviewProps) {
     <div
       className={cn(
         "relative cursor-pointer bg-secondary",
-        isSelected && "outline outline-primary",
+        isSelected && "outline-1 outline-primary",
       )}
     >
       <WixImage

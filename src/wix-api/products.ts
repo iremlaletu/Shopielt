@@ -1,4 +1,4 @@
-import { getWixClient } from "@/lib/wix-client.base";
+import { WixClient } from "@/lib/wix-client.base";
 import { cache } from "react";
 
 export type ProductsSort = "last_updated" | "price_asc" | "price_desc";
@@ -9,13 +9,11 @@ interface QueryProductsFilter {
 }
 // reusable function to query products
 
-export default async function queryProducts({
-  collectionIds,
-  sort = "last_updated",
-}: QueryProductsFilter) {
-  const wixClient = getWixClient();
-
-  // This is a query builder pattern query 
+export default async function queryProducts(
+  wixClient: WixClient,
+  { collectionIds, sort = "last_updated" }: QueryProductsFilter,
+) {
+  // This is a query builder pattern query
   let query = wixClient.products.queryProducts();
 
   const collectionIdsArray = collectionIds
@@ -27,7 +25,7 @@ export default async function queryProducts({
   if (collectionIdsArray.length > 0) {
     query = query.hasSome("collectionIds", collectionIdsArray);
   }
-  
+
   switch (sort) {
     case "price_asc":
       query = query.ascending("price");
@@ -43,23 +41,22 @@ export default async function queryProducts({
   return query.find(); // Execute the query and return the results
 }
 
-
 // purpose of cache function is to dedeuplicate the calls to this function with same argument(e.g. "slug/page.tsx")
 
-export const getProductBySlug = cache ( async (slug: string ) => {
-  console.log("Fetching product with slug:");
-  const wixClient = getWixClient();
-  const {items} = await wixClient.products.queryProducts() // this comes from wix client instance, builder pattern
-  .eq("slug", slug)
-  .limit(1) // Limit to 1 result since slug is unique
-  .find(); // execute the query
+export const getProductBySlug = cache(async (wixClient: WixClient, slug: string) => {
+  
+  const { items } = await wixClient.products
+    .queryProducts() // this comes from wix client instance, builder pattern
+    .eq("slug", slug)
+    .limit(1) // Limit to 1 result since slug is unique
+    .find(); // execute the query
 
   const product = items[0]; // Get the first item from the results
-  if(!product || !product.visible){
+  if (!product || !product.visible) {
     return null;
   }
   return product;
-} )
+});
 
 {
   /*

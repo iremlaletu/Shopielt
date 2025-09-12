@@ -3,41 +3,50 @@ import { notFound } from "next/navigation";
 import ProductDetails from "./ProductDetails";
 import { Metadata } from "next";
 import { delay } from "@/lib/utils";
+import { getWixServerClient } from "@/lib/wix-client.server";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params : {slug} }: PageProps) :Promise <Metadata> {
-  const product = await getProductBySlug(slug);
-  if(!product) notFound();
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const wix = await getWixServerClient();
+  const product = await getProductBySlug(wix, slug);
+
+  if (!product) notFound();
 
   const mainImage = product.media?.mainMedia?.image;
 
   return {
     title: product.name,
-    description:" Get this product at the best price", 
+    description: " Get this product at the best price",
     openGraph: {
       images: mainImage?.url
-      ? [
-          {
-            url: mainImage.url,
-            width: mainImage.width,
-            height: mainImage.height,
-            alt: mainImage.altText || "",
-            type: 'image/jpeg',
-          }
-      ] : undefined
-    }
-  }
+        ? [
+            {
+              url: mainImage.url,
+              width: mainImage.width,
+              height: mainImage.height,
+              alt: mainImage.altText || "",
+              type: "image/jpeg",
+            },
+          ]
+        : undefined,
+    },
+  };
 }
 
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params;
+  // small opt for awaitng client after delay
+  const wixP = getWixServerClient();
+  await delay(3000);
+  const wix = await wixP;
 
-export default async function Page({ params: {slug} }: PageProps) {
-  
-  await delay(3000); 
-  
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(wix, slug);
 
   if (!product?._id) notFound();
 
@@ -48,10 +57,11 @@ export default async function Page({ params: {slug} }: PageProps) {
   );
 }
 
-{/*
+{
+  /*
     to see single product data in json format
     <pre>
         {JSON.stringify(product, null, 2)}
     </pre>
-*/}
-
+*/
+}
