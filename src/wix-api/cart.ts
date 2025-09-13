@@ -19,7 +19,9 @@ export default async function getCart(wixClient:WixClient) {
   }
 }
 
-interface AddToCartParams {
+// Add to Cart
+
+export interface AddToCartParams {
   product: products.Product;
   selectedOptions: Record<string, string>;
   quantity: number;
@@ -29,7 +31,9 @@ export async function addToCart(
   wixClient: WixClient,
   { product, selectedOptions, quantity }: AddToCartParams,
 ) {
+  
   const selectedVariant = findVariant(product, selectedOptions);
+  
   return wixClient.currentCart.addToCurrentCart({
     lineItems: [
       {
@@ -50,3 +54,29 @@ export async function addToCart(
 
 // appId: WIX_STORES_APP_ID, comes from constants.ts which was from documentation
 // no need to put this env variable because it is constant and will not change
+
+// Update Cart
+
+export interface UpdateCartItemQuantityValues {
+  productId: string;
+  newQuantity: number;
+}
+
+export async function updateCartItemQuantity(
+  wixClient: WixClient,
+  { productId, newQuantity }: UpdateCartItemQuantityValues,
+) {
+  
+  return wixClient.currentCart.updateCurrentCartLineItemQuantity([
+    {
+      _id: productId,
+      quantity: newQuantity,
+    },
+  ]);
+}
+
+// remove items in cart
+
+export async function removeCartItem(wixClient: WixClient, productId: string) {
+  return wixClient.currentCart.removeLineItemsFromCurrentCart([productId]);
+}

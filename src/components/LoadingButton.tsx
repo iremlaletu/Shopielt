@@ -1,0 +1,27 @@
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
+
+type ButtonProps = React.ComponentProps<typeof Button>; // inherit both shadcnuı and normal html button props
+
+interface LoadingButtonProps extends ButtonProps {
+  loading: boolean;
+}
+
+export default function LoadingButton({
+  loading,
+  disabled,
+  className,
+  ...props
+}: LoadingButtonProps) {
+  return (
+    <Button
+      disabled={loading || disabled}
+      className={cn("flex items-center gap-2 cursor-pointer", className)}
+      {...props}
+    >
+      {loading && <Loader2 className="size-5 animate-spin" />}
+      {props.children}
+    </Button>
+  );
+}
