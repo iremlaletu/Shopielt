@@ -41,6 +41,8 @@ export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
 
-// after 14 days, refreshtokens will be expired, then they will lose their products in their carts
+// after 14 days, refreshtokens will be expired, then they will lose their products in their carts too
 // if they didnt login within 14 days again they need to login again
 // these tokens(session and refresh) stored in a cookie, in order for them to work, pass them to wixclient.base 
+// If the access token has expired but the refresh token is valid, generateVisitorTokens() returns the existing refresh token and a newly generated access token.
+// If the refresh token is not valid, generateVisitorTokens() returns a new refresh token and a new access token.

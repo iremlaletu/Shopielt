@@ -17,6 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import AddToCartButton from "@/components/AddToCartButton";
+import BackInStockNotificationButton from "@/components/BackInStockNotificationButton";
 
 interface ProductDetailsProps {
   product: products.Product;
@@ -63,7 +64,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <div className="flex flex-col gap-10 md:flex-row lg:gap-20">
-      { /* Check if there is an image for the selected option, otherwise fallback to product images */ }
+      {/* Check if there is an image for the selected option, otherwise fallback to product images */}
       <ProductMedia
         media={
           !!selectedOptionsMedia?.length
@@ -95,13 +96,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
             <Label htmlFor="quantity">Quantity</Label>
             <div className="flex items-center gap-3">
               <Input
+                id="quantity"
                 name="quantity"
                 type="number"
                 value={quantity}
-                onChange={(e) => {
-                  setQuantity(Number(e.target.value));
-                  console.log(e.target.value);
-                }}
+                onChange={(e) => setQuantity(Number(e.target.value))}
                 className="w-20"
                 disabled={!inStock}
                 max={availableQuantity ?? undefined}
@@ -117,8 +116,19 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
         </div>
 
         {inStock ? (
-          <AddToCartButton product={product} selectedOptions={selectedOptions} quantity={quantity} disabled={availableQuantityExceeded || quantity < 1} />
-        ) : ( <div className="underline">Out of Stock</div> ) }
+          <AddToCartButton
+            product={product}
+            selectedOptions={selectedOptions}
+            quantity={quantity}
+            disabled={availableQuantityExceeded || quantity < 1}
+            className="w-full"
+          />
+        ) : (
+          <div className="flex flex-col gap-3">
+            <p className="underline">Out of Stock</p>
+            <BackInStockNotificationButton product={product} selectedOptions={selectedOptions} />
+          </div>
+        )}
 
         {!!product.additionalInfoSections?.length && (
           <div className="text-muted-foreground space-y-5 text-sm">

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { Label } from "@radix-ui/react-label";
 
 const Footer = () => {
   return (
@@ -131,8 +132,12 @@ const Footer = () => {
           <h3 className="font-semibold text-base mb-6">Subscribe</h3>
           <p className="text-muted-foreground ">Get the latest news about trends, promotions, and more!</p>
           <form className="mt-4 flex items-center gap-2">
+             <Label htmlFor="newsletter-email" className="sr-only">Email address</Label>
             <Input
+             id="newsletter-email"
               type="email"
+              name="email"
+               autoComplete="email"
               placeholder="Email address"
               className="w-full"
             />
