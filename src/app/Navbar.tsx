@@ -1,11 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import getCart from "@/wix-api/cart";
 import { getWixServerClient } from "@/lib/wix-client.server";
 import ShoppingCartButton from "./ShoppingCartButton";
+import UserButton from "@/components/UserButton";
+import { getLoggedInMember } from "@/wix-api/members";
+import { getCart } from "@/wix-api/cart";
 
 export default async function Navbar() {
-  const cart = await getCart(await getWixServerClient());
+  const wixClient = getWixServerClient();
+  const [cart, loggedInMember] = await Promise.all([
+    getCart(await wixClient),
+    getLoggedInMember(await wixClient),
+  ]);
 
   return (
     <header className="bg-background shadow-sm">
@@ -20,8 +26,13 @@ export default async function Navbar() {
             priority
           />
         </Link>
-        <ShoppingCartButton initialData={cart} />
+        <div className="flex items-center justify-center gap-4">
+          <UserButton loggedInMember={loggedInMember} />
+          <ShoppingCartButton initialData={cart} />
+        </div>
       </div>
     </header>
   );
 }
+
+// is server component

@@ -3,7 +3,7 @@ import { findVariant } from "@/lib/utils";
 import { WixClient } from "@/lib/wix-client.base";
 import { products } from "@wix/stores";
 
-export default async function getCart(wixClient:WixClient) {
+export async function getCart(wixClient:WixClient) {
   
   try {
     return await wixClient.currentCart.getCurrentCart();

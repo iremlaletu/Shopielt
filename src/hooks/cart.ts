@@ -1,10 +1,11 @@
 import { wixBrowserClient } from "@/lib/wix-client.browser";
-import getCart, {
+import {
   addToCart,
   AddToCartParams,
   removeCartItem,
   updateCartItemQuantity,
   UpdateCartItemQuantityValues,
+  getCart
 } from "@/wix-api/cart";
 import {
   MutationKey,
