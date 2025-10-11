@@ -3,8 +3,9 @@ import useAuth from "@/hooks/auth";
 import { Button } from "./ui/button";
 import { members } from "@wix/members";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { LogInIcon, LogOutIcon, Monitor, UserIcon } from "lucide-react";
+import { Check, LogInIcon, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 interface UserButtonProps {
   loggedInMember: members.Member | null;
@@ -13,6 +14,8 @@ interface UserButtonProps {
 
 export default function UserButton( { loggedInMember, className }: UserButtonProps) {
     const {login, logout} = useAuth();
+    
+    const { theme, setTheme } = useTheme()
    return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,7 +47,21 @@ export default function UserButton( { loggedInMember, className }: UserButtonPro
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
-             
+             <DropdownMenuItem onClick={() => setTheme("system")}>
+              <Monitor className="mr-2 size-4" />
+              System Default
+              {theme === "system" && <Check className="ms-2 size-4" />}
+             </DropdownMenuItem>
+             <DropdownMenuItem onClick={() => setTheme("light")}>
+                <Sun className="mr-2 size-4" />
+                Light
+                {theme === "light" && <Check className="ms-2 size-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                <Moon className="mr-2 size-4" />
+                Dark
+                {theme === "dark" && <Check className="ms-2 size-4" />}
+              </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
