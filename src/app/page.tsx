@@ -3,8 +3,8 @@ import Product from "@/components/Product";
 import ProductSkeleton from "@/components/ProductSkeleton";
 import { delay } from "@/lib/utils";
 import { getWixServerClient } from "@/lib/wix-client.server";
-import getCollectionsBySlug from "@/wix-api/collections";
-import queryProducts from "@/wix-api/products";
+import { getCollectionsBySlug} from "@/wix-api/collections";
+import { queryProducts } from "@/wix-api/products";
 import { Suspense } from "react";
 
 export default function Home() {

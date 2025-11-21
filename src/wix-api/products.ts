@@ -6,12 +6,14 @@ export type ProductsSort = "last_updated" | "price_asc" | "price_desc";
 interface QueryProductsFilter {
   collectionIds?: string[] | string;
   sort?: ProductsSort;
+  skip?: number;
+  limit?: number;
 }
 // reusable function to query products
 
-export default async function queryProducts(
+export async function queryProducts(
   wixClient: WixClient,
-  { collectionIds, sort = "last_updated" }: QueryProductsFilter,
+  { collectionIds, sort = "last_updated", skip, limit }: QueryProductsFilter,
 ) {
   // This is a query builder pattern query
   let query = wixClient.products.queryProducts();
@@ -37,6 +39,9 @@ export default async function queryProducts(
       query = query.descending("lastUpdated");
       break;
   }
+
+  if (limit) query = query.limit(limit); // reassign query with if  we pass limit 
+  if (skip) query = query.skip(skip);
 
   return query.find(); // Execute the query and return the results
 }

@@ -101,7 +101,7 @@ export default function HeroCarousel() {
 
                       {/* Subtitle */}
                       <p className="text-sm leading-relaxed text-primary-foreground">
-                        Refresh your wardrobe with limited-time deals up to {s.discountPct}% off on the season’s most-loved picks.
+                        Refresh your wardrobe with limited-time deals up to {s.discountPct}% off on the season&rsquo;s most-loved picks.
                       </p>
 
                       {/* CTAs */}

@@ -6,16 +6,15 @@ export default function ProductSkeleton() {
       <div className="relative overflow-hidden">
         <Skeleton className="h-[300px] w-full" />
 
-        <div className="absolute bottom-3 right-3 flex flex-wrap items-center gap-2 p-3">
-          <Skeleton className="h-3 w-14 rounded bg-sidebar-ring" />
-          <Skeleton className="h-3 w-10 rounded bg-sidebar-ring" />
+        <div className="absolute right-3 bottom-3 flex flex-wrap items-center gap-2 p-3">
+          <Skeleton className="bg-sidebar-ring h-3 w-14 rounded" />
+          <Skeleton className="bg-sidebar-ring h-3 w-10 rounded" />
         </div>
       </div>
 
       <div className="space-y-3 p-3">
         <Skeleton className="h-6 w-3/4" />
         <Skeleton className="h-8 w-full" />
-        
       </div>
     </div>
   );
