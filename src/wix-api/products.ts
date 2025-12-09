@@ -4,8 +4,11 @@ import { cache } from "react";
 export type ProductsSort = "last_updated" | "price_asc" | "price_desc";
 
 interface QueryProductsFilter {
+  q?: string;
   collectionIds?: string[] | string;
   sort?: ProductsSort;
+  priceMin?: number;
+  priceMax?: number;
   skip?: number;
   limit?: number;
 }
@@ -13,11 +16,15 @@ interface QueryProductsFilter {
 
 export async function queryProducts(
   wixClient: WixClient,
-  { collectionIds, sort = "last_updated", skip, limit }: QueryProductsFilter,
+  {q, collectionIds, sort = "last_updated", priceMax, priceMin, skip, limit }: QueryProductsFilter,
 ) {
   // This is a query builder pattern query
   let query = wixClient.products.queryProducts();
 
+  if(q){
+    query = query.startsWith("name", q)
+  }
+  
   const collectionIdsArray = collectionIds
     ? Array.isArray(collectionIds)
       ? collectionIds
@@ -40,6 +47,12 @@ export async function queryProducts(
       break;
   }
 
+  if (priceMin){
+    query = query.ge("priceData.price", priceMin); // reassign query, greater than or equal to
+  }
+  if (priceMax){
+    query = query.le("priceData.price", priceMax); // less than or equal to
+  }
   if (limit) query = query.limit(limit); // reassign query with if  we pass limit 
   if (skip) query = query.skip(skip);
 

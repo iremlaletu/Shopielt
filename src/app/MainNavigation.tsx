@@ -89,7 +89,7 @@ export default function MainNavigation({ className, collections }: Props) {
         {/* New Arrivals */}
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/new">New Arrivals</Link>
+            <Link href="/shop">Shop</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
 

@@ -43,7 +43,7 @@ export default async function Page({ params }: PageProps) {
   const { slug } = await params;
   // small opt for awaitng client after delay
   const wixP = getWixServerClient();
-  await delay(3000);
+  await delay(1000);
   const wix = await wixP;
 
   const product = await getProductBySlug(wix, slug);

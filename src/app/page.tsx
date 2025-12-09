@@ -22,7 +22,7 @@ export default function Home() {
 // I put sepereate files for each api call to keep the code clean and easy to reuse with slug.
 
 async function FeaturedProducts() {
-  await delay(2000);
+  await delay(1000);
 
   const wixClient = await getWixServerClient()
 

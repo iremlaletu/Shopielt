@@ -121,3 +121,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+main[data-pending] .pending-animate {
+  @apply animate-pulse;
+}

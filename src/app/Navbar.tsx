@@ -7,6 +7,9 @@ import { getLoggedInMember } from "@/wix-api/members";
 import { getCart } from "@/wix-api/cart";
 import { getCollections } from "@/wix-api/collections";
 import MainNavigation from "./MainNavigation";
+import SearchFields from "@/components/SearchFields";
+import MobileMenu from "./MobileMenu";
+import { Suspense } from "react";
 
 export default async function Navbar() {
 
@@ -21,6 +24,12 @@ export default async function Navbar() {
   return (
     <header className="bg-background shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-5 p-4">
+        <Suspense>
+          <MobileMenu
+            collections={collections}
+            loggedInMember={loggedInMember}
+          />
+        </Suspense>
         <div className="flex flex-wrap items-center gap-5">
           <Link href="/" className="flex items-center">
             <Image
@@ -34,8 +43,9 @@ export default async function Navbar() {
           </Link>
           <MainNavigation collections={collections} className="hidden lg:flex" />
         </div>
+        <SearchFields className="max-w-96 hidden lg:inline " />
         <div className="flex items-center justify-center gap-4">
-          <UserButton loggedInMember={loggedInMember} />
+          <UserButton loggedInMember={loggedInMember} className="hidden lg:inline-flex" />
           <ShoppingCartButton initialData={cart} />
         </div>
       </div>
@@ -43,4 +53,4 @@ export default async function Navbar() {
   );
 }
 
-// is server component
+// Why wrapped MobileMenu with Suspense? https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
