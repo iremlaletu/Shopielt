@@ -2,34 +2,73 @@
 import useAuth from "@/hooks/auth";
 import { Button } from "./ui/button";
 import { members } from "@wix/members";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Check, LogInIcon, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import {
+  Check,
+  LogInIcon,
+  LogOutIcon,
+  Monitor,
+  Moon,
+  Sun,
+  UserIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useEffect } from "react";
 
 interface UserButtonProps {
   loggedInMember: members.Member | null;
   className?: string;
 }
 
-export default function UserButton( { loggedInMember, className }: UserButtonProps) {
-    const {login, logout} = useAuth();
-    
-    const { theme, setTheme } = useTheme()
-   return (
+export default function UserButton({
+  loggedInMember,
+  className,
+}: UserButtonProps) {
+  
+  const { login, logout } = useAuth();
+  const { theme, setTheme } = useTheme();
+
+  const photoUrl = loggedInMember?.profile?.photo?.url;
+  const displayName =
+    loggedInMember?.contact?.firstName ||
+    loggedInMember?.profile?.nickname ||
+    loggedInMember?.loginEmail ||
+    "User";
+
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost" className={className}>
-          <UserIcon className="size-5"  />
+          {loggedInMember ? (
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={photoUrl} alt={displayName} />
+              <AvatarFallback>
+                {displayName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <UserIcon className="size-5" />
+          )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-44 max-w-64">
+
+      <DropdownMenuContent className="max-w-64 min-w-44">
         {loggedInMember && (
           <>
-            <DropdownMenuLabel>
-              Logged in as{" "}
-              {loggedInMember.contact?.firstName || loggedInMember.loginEmail}
-            </DropdownMenuLabel>
+            <DropdownMenuLabel> Logged in as {displayName} </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <Link href="/profile">
               <DropdownMenuItem>
@@ -47,12 +86,12 @@ export default function UserButton( { loggedInMember, className }: UserButtonPro
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
-             <DropdownMenuItem onClick={() => setTheme("system")}>
-              <Monitor className="mr-2 size-4" />
-              System Default
-              {theme === "system" && <Check className="ms-2 size-4" />}
-             </DropdownMenuItem>
-             <DropdownMenuItem onClick={() => setTheme("light")}>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                <Monitor className="mr-2 size-4" />
+                System Default
+                {theme === "system" && <Check className="ms-2 size-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("light")}>
                 <Sun className="mr-2 size-4" />
                 Light
                 {theme === "light" && <Check className="ms-2 size-4" />}

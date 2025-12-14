@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -63,6 +64,9 @@ export default function MobileMenu({
         <SheetContent side="left" className="w-full">
           <SheetHeader>
             <SheetTitle>Navigation</SheetTitle>
+            <SheetDescription>
+              Browse through the sections of the site
+          </SheetDescription>
           </SheetHeader>
           <div className="flex flex-col items-center space-y-10 py-10">
             <SearchFields className="w-full" />

@@ -1,11 +1,12 @@
 import { wixBrowserClient } from "@/lib/wix-client.browser";
 import {
   addToCart,
-  AddToCartParams,
+  AddToCartValues,
   removeCartItem,
   updateCartItemQuantity,
   UpdateCartItemQuantityValues,
-  getCart
+  getCart,
+  clearCart
 } from "@/wix-api/cart";
 import {
   MutationKey,
@@ -40,7 +41,7 @@ export function useCart(initialData: currentCart.Cart | null) {
 export function useAddItemToCart() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (values: AddToCartParams) =>
+    mutationFn: (values: AddToCartValues) =>
       addToCart(wixBrowserClient, values),
     onSuccess(data) {
       toast("Item added to cart");
@@ -60,7 +61,7 @@ export function useAddItemToCart() {
 export function useUpdateCartItemQuantity() {
   const queryClient = useQueryClient();
 
-  const mutationKey: MutationKey = ["useUpdateCartItemQuantity"]
+  const mutationKey: MutationKey = ["updateCartItemQuantity"]
   
   return useMutation({
     mutationKey,
@@ -144,4 +145,17 @@ export function useRemoveCartItem() {
      queryClient.invalidateQueries({ queryKey });
     }
   })
+}
+
+export function useClearCart() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => clearCart(wixBrowserClient),
+    onSuccess() {
+      queryClient.setQueryData(queryKey, null);
+      queryClient.invalidateQueries({ queryKey });
+    },
+    retry: 3,
+  });
 }

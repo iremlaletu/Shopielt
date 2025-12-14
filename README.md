@@ -1,6 +1,13 @@
-#### Environment Validation (T3 Env + Zod)
+##### Environment Validation (T3 Env + Zod)
 
 This setup validates and types your environment variables at build/runtime so you fail fast with clear errors and never leak secrets to the browser.
+
+##### Checkout / Payment Notice
+
+This project’s checkout functionality requires upgrading Wix Studio to a paid plan in order to enable real payment processing.
+However, this project is intended only for development/demo purposes, so no upgrade will be performed and no real checkout will be implemented.
+
+Because of this, I enabled *manual payments* instead of real payment methods (Visa, credit or debit cards) to allow the checkout flow to proceed during development. Manual payments let us simulate the checkout process without any actual charges.
 
 ---
 

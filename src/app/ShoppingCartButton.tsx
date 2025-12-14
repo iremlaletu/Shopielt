@@ -1,5 +1,6 @@
 "use client";
 
+import CheckoutButton from "@/components/CheckoutButton";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,7 +10,11 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import WixImage from "@/components/WixImage";
-import { useCart, useRemoveCartItem, useUpdateCartItemQuantity } from "@/hooks/cart";
+import {
+  useCart,
+  useRemoveCartItem,
+  useUpdateCartItemQuantity,
+} from "@/hooks/cart";
 import { currentCart } from "@wix/ecom";
 import { Loader2, ShoppingCartIcon, X } from "lucide-react";
 import Link from "next/link";
@@ -22,11 +27,10 @@ interface ShoppingCartButtonProps {
 export default function ShoppingCartButton({
   initialData,
 }: ShoppingCartButtonProps) {
-  
   const [sheetOpen, setSheetOpen] = useState(false);
-  
+
   const cartQuery = useCart(initialData);
-  
+
   const totalQuantity =
     cartQuery.data?.lineItems?.reduce(
       (acc, item) => acc + (item.quantity || 0),
@@ -122,10 +126,16 @@ export default function ShoppingCartButton({
                 Shipping and taxes calculated at checkout
               </p>
             </div>
-            <Button size="lg" disabled={!totalQuantity || cartQuery.isFetching}>
-            Checkout
-            </Button>
+            <CheckoutButton
+              size="lg"
+              disabled={!totalQuantity || cartQuery.isFetching}
+            />
           </div>
+          <Button asChild variant="outline" size="lg">
+              <Link href="/democheckout">
+                View a sample custom checkout UI (no backend)
+              </Link>
+            </Button>
         </SheetContent>
       </Sheet>
     </>
@@ -141,9 +151,8 @@ function ShoppingCartItem({
   item,
   onProductLinkClicked,
 }: ShoppingCartItemProps) {
-  
   const updateQuantityMutation = useUpdateCartItemQuantity();
-  const removeItemMutation = useRemoveCartItem()
+  const removeItemMutation = useRemoveCartItem();
 
   const productId = item._id; // Our hook expects the productId to be defined but can be null or undefined
   if (!productId) return null;
@@ -167,7 +176,10 @@ function ShoppingCartItem({
             className="bg-secondary flex-none"
           />
         </Link>
-        <button onClick={ () => removeItemMutation.mutate(productId)} className="bg-background absolute -top-1 -right-1 rounded-full border ring-1 p-0.5 cursor-pointer">
+        <button
+          onClick={() => removeItemMutation.mutate(productId)}
+          className="bg-background absolute -top-1 -right-1 cursor-pointer rounded-full border p-0.5 ring-1"
+        >
           <X className="size-3" />
         </button>
       </div>

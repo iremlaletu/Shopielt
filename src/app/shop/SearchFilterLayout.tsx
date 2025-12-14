@@ -71,8 +71,8 @@ export default function SearchFilterLayout({
         <CollectionsFilter
           collections={collections}
           selectedCollectionIds={optimisticFilters.collection}
-          updateCollectionIds={(collectionIds) =>
-            updateFilters({ collection: collectionIds }) // expect an object
+          updateCollectionIds={
+            (collectionIds) => updateFilters({ collection: collectionIds }) // expect an object
           }
         />
         <PriceFilter
@@ -86,20 +86,18 @@ export default function SearchFilterLayout({
           }
         />
         <SortFilter
-            sort={optimisticFilters.sort}
-            updateSort={(sort) => updateFilters({ sort })}
-          />
+          sort={optimisticFilters.sort}
+          updateSort={(sort) => updateFilters({ sort })}
+        />
       </aside>
-      <div className="w-full max-w-7xl space-y-5">
-        
-        {children}
-      </div>
+      <div className="w-full max-w-7xl space-y-5">{children}</div>
     </main>
   );
 }
 
-{ /* ** Collection filter component ** */ } 
-
+{
+  /* ** Collection filter component ** */
+}
 
 interface CollectionsFilterProps {
   collections: collections.Collection[];
@@ -144,9 +142,7 @@ function CollectionsFilter({
         })}
       </ul>
       {selectedCollectionIds.length > 0 && (
-        <Button className="w-full"
-          onClick={() => updateCollectionIds([])} 
-        >
+        <Button className="w-full" onClick={() => updateCollectionIds([])}>
           Clear
         </Button>
       )}
@@ -154,7 +150,9 @@ function CollectionsFilter({
   );
 }
 
-{ /* ** Price filter component ** */ } 
+{
+  /* ** Price filter component ** */
+}
 
 interface PriceFilterProps {
   minDefaultInput: string | undefined;
@@ -167,18 +165,22 @@ function PriceFilter({
   maxDefaultInput,
   updatePriceRange,
 }: PriceFilterProps) {
-  const [minInput, setMinInput] = useState(minDefaultInput);
-  const [maxInput, setMaxInput] = useState(maxDefaultInput);
+  const [minInput, setMinInput] = useState<string>(minDefaultInput ?? "");
+  const [maxInput, setMaxInput] = useState<string>(maxDefaultInput ?? "");
 
   // this resets the input fields when the default props change
   useEffect(() => {
-    setMinInput(minDefaultInput || ""); // when cleared, set to empty string
-    setMaxInput(maxDefaultInput || "");
+    setMinInput(minDefaultInput ?? ""); // when cleared, set to empty string
+    setMaxInput(maxDefaultInput ?? "");
   }, [minDefaultInput, maxDefaultInput]);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    updatePriceRange(minInput, maxInput);
+    // Convert empty strings to undefined so we don't write them into the URL.
+    // This ensures the price filters are properly cleared when the input fields are empty.
+    const min = minInput.trim() === "" ? undefined : minInput;
+    const max = maxInput.trim() === "" ? undefined : maxInput;
+    updatePriceRange(min, max);
   }
 
   return (
@@ -187,28 +189,31 @@ function PriceFilter({
       <form className="space-y-2" onSubmit={onSubmit}>
         <div className="flex items-center gap-2">
           <Input
-          type="number"
-          name="min"
-          placeholder="Min"
-          value={minInput}
-          onChange={(e) => setMinInput(e.target.value)}
-          className="w-24"
-        />
-        <span>-</span>
-        <Input
-          type="number"
-          name="max"
-          placeholder="Max"
-          value={maxInput}
-          onChange={(e) => setMaxInput(e.target.value)}
-          className="w-24"
-        />
+            type="number"
+            name="min"
+            placeholder="Min"
+            value={minInput}
+            onChange={(e) => setMinInput(e.target.value)}
+            className="w-24"
+          />
+          <span>-</span>
+          <Input
+            type="number"
+            name="max"
+            placeholder="Max"
+            value={maxInput}
+            onChange={(e) => setMaxInput(e.target.value)}
+            className="w-24"
+          />
         </div>
-        <Button className="w-full" type="submit">Apply</Button>
+        <Button className="w-full" type="submit">
+          Apply
+        </Button>
       </form>
       {(!!minDefaultInput || !!maxDefaultInput) && (
-        <Button className="w-full"
-          onClick={() => updatePriceRange(undefined, undefined)} 
+        <Button
+          className="w-full"
+          onClick={() => updatePriceRange(undefined, undefined)}
         >
           Clear
         </Button>
@@ -217,7 +222,9 @@ function PriceFilter({
   );
 }
 
-{ /* ** Sort filter component ** */ } 
+{
+  /* ** Sort filter component ** */
+}
 
 interface SortFilterProps {
   sort: string | undefined;

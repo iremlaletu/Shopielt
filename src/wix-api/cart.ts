@@ -9,7 +9,6 @@ export async function getCart(wixClient:WixClient) {
     return await wixClient.currentCart.getCurrentCart();
   } catch (error) {
     if (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (error as any).details.applicationError.code === "OWNED_CART_NOT_FOUND"
     ) {
       return null;
@@ -21,7 +20,7 @@ export async function getCart(wixClient:WixClient) {
 
 // Add to Cart
 
-export interface AddToCartParams {
+export interface AddToCartValues {
   product: products.Product;
   selectedOptions: Record<string, string>;
   quantity: number;
@@ -29,7 +28,7 @@ export interface AddToCartParams {
 
 export async function addToCart(
   wixClient: WixClient,
-  { product, selectedOptions, quantity }: AddToCartParams,
+  { product, selectedOptions, quantity }: AddToCartValues,
 ) {
   
   const selectedVariant = findVariant(product, selectedOptions);
@@ -79,4 +78,18 @@ export async function updateCartItemQuantity(
 
 export async function removeCartItem(wixClient: WixClient, productId: string) {
   return wixClient.currentCart.removeLineItemsFromCurrentCart([productId]);
+}
+
+export async function clearCart(wixClient: WixClient) {
+  try {
+    return await wixClient.currentCart.deleteCurrentCart();
+  } catch (error) {
+    if (
+      (error as any).details.applicationError.code === "OWNED_CART_NOT_FOUND"
+    ) {
+      return;
+    } else {
+      throw error;
+    }
+  }
 }

@@ -56,3 +56,36 @@ export function checkInStock(
         product.stock?.inventoryStatus ===
           products.InventoryStatus.PARTIALLY_OUT_OF_STOCK;
 }
+
+export function formatDateTR(iso?: string | null) {
+  if (!iso) return null;
+
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("tr-TR", {
+    dateStyle: "long",
+    timeZone: "Europe/Istanbul",
+  }).format(d);
+}
+
+export function relativeDaysTR(iso?: string | null) {
+  if (!iso) return null;
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+
+  const toLocalDay = (x: Date) =>
+    new Date(
+      x.toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" }) + "T00:00:00",
+    ).getTime();
+
+  const target = toLocalDay(new Date(iso));
+  const today = toLocalDay(new Date());
+
+  const diffDays = Math.round((target - today) / msPerDay);
+
+  return new Intl.RelativeTimeFormat("tr-TR", { numeric: "auto" }).format(
+    diffDays,
+    "day",
+  );
+}
+
+
