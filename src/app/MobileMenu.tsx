@@ -32,17 +32,14 @@ export default function MobileMenu({
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Breakpoint
     const LG_BREAKPOINT = 1024; 
 
     const handleResize = () => {
-      if (window.innerWidth > LG_BREAKPOINT) { 
+      if (window.innerWidth > LG_BREAKPOINT) {
         setIsOpen(false);
       }
     };
-    
     window.addEventListener("resize", handleResize);
-    
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -66,7 +63,7 @@ export default function MobileMenu({
             <SheetTitle>Navigation</SheetTitle>
             <SheetDescription>
               Browse through the sections of the site
-          </SheetDescription>
+            </SheetDescription>
           </SheetHeader>
           <div className="flex flex-col items-center space-y-10 py-10">
             <SearchFields className="w-full" />
@@ -87,7 +84,8 @@ export default function MobileMenu({
                 </li>
               ))}
             </ul>
-            <UserButton loggedInMember={loggedInMember} />
+
+            {isOpen && <UserButton loggedInMember={loggedInMember} />}
           </div>
         </SheetContent>
       </Sheet>

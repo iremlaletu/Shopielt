@@ -26,7 +26,6 @@ import {
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { useEffect } from "react";
 
 interface UserButtonProps {
   loggedInMember: members.Member | null;
@@ -42,19 +41,15 @@ export default function UserButton({
   const { theme, setTheme } = useTheme();
 
   const photoUrl = loggedInMember?.profile?.photo?.url;
-  const displayName =
-    loggedInMember?.contact?.firstName ||
-    loggedInMember?.profile?.nickname ||
-    loggedInMember?.loginEmail ||
-    "User";
+  const displayName = loggedInMember?.contact?.firstName || loggedInMember?.profile?.nickname || "User";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost" className={className}>
           {loggedInMember ? (
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={photoUrl} alt={displayName} />
+            <Avatar>
+              <AvatarImage src={photoUrl} alt={displayName} loading="lazy"  />
               <AvatarFallback>
                 {displayName.charAt(0).toUpperCase()}
               </AvatarFallback>

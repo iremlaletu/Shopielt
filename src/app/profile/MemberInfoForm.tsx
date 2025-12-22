@@ -20,13 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { useDeleteMemberAddresses, useUpdateMember } from "@/hooks/member";
+import { useDeleteMemberAddresses, useMember, useUpdateMember } from "@/hooks/member";
 import { formatDateTR, relativeDaysTR } from "@/lib/utils";
 import { requiredString } from "@/lib/validation";
 import { UpdateMemberInfoValues } from "@/wix-api/members";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { members } from "@wix/members";
 import { MapPin, Trash2, User } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -86,19 +87,22 @@ const COUNTRY_OPTIONS = [
 ];
 
 export default function MemberInfoForm({ member }: MemberInfoFormProps) {
-  const primaryAddress = member.contact?.addresses?.[0];
-  const photoUrl = member.profile?.photo?.url || "";
+  const { data: currentMember } = useMember(member);
+  const memberData = currentMember ?? member;
+
+  const primaryAddress = memberData?.contact?.addresses?.[0];
+  const photoUrl = memberData?.profile?.photo?.url || "";
   const displayName =
-    member.contact?.firstName ||
-    member.profile?.nickname ||
-    member.loginEmail ||
+    memberData?.contact?.firstName ||
+    memberData?.profile?.nickname ||
+    memberData?.loginEmail ||
     "User";
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      loginEmail: member.loginEmail || "",
-      firstName: member.contact?.firstName || "",
-      lastName: member.contact?.lastName || "",
+      loginEmail: memberData?.loginEmail || "",
+      firstName: memberData?.contact?.firstName || "",
+      lastName: memberData?.contact?.lastName || "",
       addressLine: "",
       addressLine2: "",
       city: "",
@@ -135,9 +139,9 @@ export default function MemberInfoForm({ member }: MemberInfoFormProps) {
     });
   }
 
-  const memberSince = formatDateTR((member as any)._createdDate);
-  const lastLoginDate = formatDateTR((member as any).lastLoginDate);
-  const lastLoginRel = relativeDaysTR((member as any).lastLoginDate);
+  const memberSince = formatDateTR((memberData as any)?._createdDate);
+  const lastLoginDate = formatDateTR((memberData as any)?.lastLoginDate);
+  const lastLoginRel = relativeDaysTR((memberData as any)?.lastLoginDate);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -166,13 +170,13 @@ export default function MemberInfoForm({ member }: MemberInfoFormProps) {
 
               <div className="min-w-0">
                 <div className="truncate font-semibold">
-                  {(member.contact?.firstName || displayName) +
-                    (member.contact?.lastName
-                      ? ` ${member.contact?.lastName}`
+                  {(memberData?.contact?.firstName || displayName) +
+                    (memberData?.contact?.lastName
+                      ? ` ${memberData.contact?.lastName}`
                       : "")}
                 </div>
                 <div className="text-muted-foreground truncate text-sm">
-                  {member.loginEmail}
+                  {memberData?.loginEmail}
                 </div>
               </div>
             </div>
@@ -180,11 +184,13 @@ export default function MemberInfoForm({ member }: MemberInfoFormProps) {
 
           <CardContent className="space-y-3">
             <div className="flex flex-wrap gap-2">
-              {member.activityStatus && <Badge>{member.activityStatus}</Badge>}
-              {member.status && (
-                <Badge variant="secondary">{member.status}</Badge>
+              {memberData?.activityStatus && (
+                <Badge>{memberData.activityStatus}</Badge>
               )}
-              {member.loginEmailVerified && (
+              {memberData?.status && (
+                <Badge variant="secondary">{memberData.status}</Badge>
+              )}
+              {memberData?.loginEmailVerified && (
                 <Badge variant="outline">Email verified</Badge>
               )}
             </div>

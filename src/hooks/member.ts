@@ -1,20 +1,47 @@
 import { wixBrowserClient } from "@/lib/wix-client.browser";
-import { deleteMyMemberAddresses, updateMemberInfo, UpdateMemberInfoValues } from "@/wix-api/members";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import {
+  deleteMyMemberAddresses,
+  getLoggedInMember,
+  updateMemberInfo,
+  UpdateMemberInfoValues,
+} from "@/wix-api/members";
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { members } from "@wix/members";
 import { toast } from "sonner";
 
+export const memberQueryKey: QueryKey = ["member"];
+
+export function useMember(initialData: members.Member | null) {
+  return useQuery({
+    queryKey: memberQueryKey,
+    queryFn: () => getLoggedInMember(wixBrowserClient),
+    initialData,
+  });
+}
+
 export function useUpdateMember() {
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (variables: UpdateMemberInfoValues) =>
       updateMemberInfo(wixBrowserClient, variables),
-    onSuccess() {
+    onSuccess(data) {
+      const updatedMember =
+        (data as any)?.member ?? (data as members.Member | null);
+      if (updatedMember) {
+        queryClient.setQueryData<members.Member | null>(
+          memberQueryKey,
+          updatedMember,
+        );
+      } else {
+        queryClient.invalidateQueries({ queryKey: memberQueryKey });
+      }
       toast("Profile updated");
-      setTimeout(() => {
-        router.refresh();
-      }, 1200);
     },
     onError(error) {
       console.error(error);
@@ -24,15 +51,25 @@ export function useUpdateMember() {
 }
 
 export function useDeleteMemberAddresses() {
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => deleteMyMemberAddresses(wixBrowserClient),
     onSuccess() {
       toast("Address deleted");
-      setTimeout(() => {
-        router.refresh();
-      }, 1200);
+      queryClient.setQueryData<members.Member | null>(
+        memberQueryKey,
+        (prev) =>
+          prev
+            ? {
+                ...prev,
+                contact: {
+                  ...prev.contact,
+                  addresses: [],
+                },
+              }
+            : prev,
+      );
     },
     onError(error) {
       console.error(error);

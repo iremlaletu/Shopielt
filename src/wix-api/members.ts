@@ -1,17 +1,20 @@
 import { WixClient } from "@/lib/wix-client.base";
 import { members } from "@wix/members";
+import { cache } from "react";
 
-export async function getLoggedInMember(
-  wixClient: WixClient,
-): Promise<members.Member | null> {
-  if (!wixClient.auth.loggedIn()) return null;
+export const getLoggedInMember = cache(
+  async (wixClient: WixClient): Promise<members.Member | null> => {
+    if (!wixClient.auth.loggedIn()) {
+      return null;
+    }
 
-  const memberData = await wixClient.members.getCurrentMember({
-    fieldsets: [members.Set.FULL],
-  });
+    const memberData = await wixClient.members.getCurrentMember({
+      fieldsets: [members.Set.FULL],
+    });
 
-  return memberData.member || null;
-}
+    return memberData.member || null;
+  },
+);
 
 export interface UpdateMemberInfoValues {
   firstName: string;
@@ -49,7 +52,7 @@ export async function updateMemberInfo(
     lastName,
   };
 
-  // ✅ sadece adres alanlarından biri doluysa addresses gönder
+  // sadece adres alanlarından biri doluysa addresses gönder
   // (boşsa addresses'e hiç dokunma → mevcut adres korunur)
   if (hasAddressFields) {
     contactPayload.addresses = [

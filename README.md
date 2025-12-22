@@ -1,13 +1,51 @@
-##### Environment Validation (T3 Env + Zod)
 
-This setup validates and types your environment variables at build/runtime so you fail fast with clear errors and never leak secrets to the browser.
+<details>
+<summary><strong>Environment Validation (T3 Env + Zod)</strong></summary>
 
-##### Checkout / Payment Notice
+* This setup validates and types your environment variables at build/runtime so you fail fast with clear errors and never leak secrets to the browser.
+</details>
 
-This project’s checkout functionality requires upgrading Wix Studio to a paid plan in order to enable real payment processing.
+<details>
+<summary><strong>Checkout / Payment Notice</strong></summary>
+
+* This project’s checkout functionality requires upgrading Wix Studio to a paid plan in order to enable real payment processing.
 However, this project is intended only for development/demo purposes, so no upgrade will be performed and no real checkout will be implemented.
 
-Because of this, I enabled *manual payments* instead of real payment methods (Visa, credit or debit cards) to allow the checkout flow to proceed during development. Manual payments let us simulate the checkout process without any actual charges.
+* Because of this, I enabled *manual payments* instead of real payment methods (Visa, credit or debit cards) to allow the checkout flow to proceed during development. Manual payments let us simulate the checkout process without any actual charges.
+
+</details>
+
+
+<details>
+  <summary><strong>Profile Page Data Flow</strong></summary>
+
+<br/>
+
+* **Server fetch:** In `src/app/profile/page.tsx`, the member is fetched on the server (SSR) via `getLoggedInMember(getWixServerClient())` and passed to `MemberInfoForm` as an initial prop.
+
+* **Client cache:** Inside `MemberInfoForm`, `useMember(initialData)` writes the initial data into React Query’s cache under the `["member"]` key. After mutations, the same key is reused so the UI updates instantly.
+
+* **Update:** `useUpdateMember` (a React Query mutation) writes the updated member payload returned from `updateMemberInfo` into the cache using
+  `setQueryData(["member"], updatedMember)`.
+  There is no `router.refresh`; the UI updates directly from the cache.
+
+* **Delete address:** After `useDeleteMemberAddresses` deletes the addresses in Wix, it clears `member.contact.addresses` in the cache, and the UI immediately shows “No address saved”.
+
+* **Validation:** The form schema is defined with `zod`. Using `superRefine`, it enforces the rule “if any address field is filled, all are required” (i.e. `addressLine`, `city`, `country`, and `postalCode` must be provided together; otherwise, custom issues are added per field).
+  This ensures that when you only want to update fields like username or last name, you are not forced to re-enter required address fields.
+
+* **Fallback:** If the cache is empty, the component falls back to the SSR initial member (`currentMember ?? member`). This fallback is kept to always select the most up-to-date source, even in single-session scenarios.
+
+* **Wix address update behavior:** Address updates are performed using the **override** behavior as defined in the Wix documentation.
+
+* **References:**
+
+  * Delete member emails (Wix Members API):
+    [https://dev.wix.com/docs/api-reference/crm/members-contacts/members/member-management/members/delete-member-emails](https://dev.wix.com/docs/api-reference/crm/members-contacts/members/member-management/members/delete-member-emails)
+  * Recommendation document reference (Wix eCommerce SDK):
+    [https://dev.wix.com/docs/sdk/backend-modules/ecom/recommendations/list-available-algorithms](https://dev.wix.com/docs/sdk/backend-modules/ecom/recommendations/list-available-algorithms)
+
+</details>
 
 ---
 
@@ -34,7 +72,6 @@ Because of this, I enabled *manual payments* instead of real payment methods (Vi
 
 </details>
 
----
 
 <details>
   <summary><strong>Architecture Cache Behavior</strong></summary>
@@ -61,7 +98,6 @@ Because of this, I enabled *manual payments* instead of real payment methods (Vi
 
 </details>
 
----
 
 <details>
   <summary><strong>UI Edge-Case</strong></summary>
