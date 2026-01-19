@@ -47,6 +47,44 @@ However, this project is intended only for development/demo purposes, so no upgr
 
 </details>
 
+<details>
+<summary><strong>Product Reviews & uploads media attachments </strong></summary>
+
+- This setup starts from the Wix Studio project dashboard.
+- Search for **“Wix Reviews”** in **Resources → Wix App Market**, install it in the project, and follow the setup instructions.
+- In **Settings → Moderation**, enable **Images and Videos** and set **Ratings** to **All stars**.
+
+- To create reviews programmatically, follow the official Wix Reviews API documentation:  
+  https://dev.wix.com/docs/api-reference/crm/community/feedback-moderation/reviews/reviews/create-review?apiView=SDK
+
+##### Media Attachments for Reviews
+
+- Implementing media attachments for reviews requires **admin access**.
+- Creating and uploading media URLs requires an **Admin API key**.
+- The Admin API key can be generated from:  
+  **Dashboard → Settings → Headless → Manage Admin API Key**
+- Copy the key to env file.
+- A Project Site ID is also required and can be obtained from Wix Studio. After retrieving the Site ID from URL, copy the value into the .env file, expose and destructure it in env.ts safely. The admin client is configured in lib/wix-client.server so it can be reused whenever admin level access is required.
+- Again, URLs can only be generated via the admin client, so this logic must be handled in API routes where backend operations are performed.
+
+- Used `ky` as a lightweight HTTP client on top of native Fetch to simplify request handling, query parameters, and response parsing, and easier file upload configuration (including disabling timeouts for large or parallel uploads).
+
+- Media Attachments response reference doc: https://dev.wix.com/docs/sdk/backend-modules/reviews/reviews/create-review
+
+##### Review Moderation Flow
+- Reviews are **not rendered immediately** after submission.
+- When a user submits a review, it enters a **moderation state**.
+- The review becomes visible on the site **only after approval by the site administrator via Wix Studio**.
+- After submission, users are shown the following message:
+
+  > *“Thank you for your review!  
+  > Your review has been submitted successfully. It will be visible once it has been approved by our team.”*
+
+- When a new review is submitted, an **email notification is automatically sent to the site administrator**, informing them that a review is awaiting approval.
+
+</details>
+
+
 ---
 
 ### GOTCHA

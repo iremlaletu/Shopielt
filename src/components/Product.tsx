@@ -19,21 +19,17 @@ export default function Product({ product }: ProductProps) {
       href={`/products/${product.slug}`}
       className="group bg-card h-full border"
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden bg-muted aspect-square">
         <WixImage
           mediaIdentifier={main?.url}
           alt={main?.altText}
-          width={700}
-          height={700}
-          className="block transition-opacity duration-300 group-hover:opacity-0"
+          className="w-full h-full object-cover block transition-opacity duration-300 group-hover:opacity-0"
         />
 
         <WixImage
           mediaIdentifier={second?.url}
           alt={second?.altText ?? product.name}
-          width={700}
-          height={700}
-          className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         />
 
         <div className="absolute right-3 bottom-3 flex flex-wrap items-center gap-2">

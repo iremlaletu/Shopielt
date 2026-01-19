@@ -170,10 +170,8 @@ function ShoppingCartItem({
         <Link href={`/products/${slug}`} onClick={onProductLinkClicked}>
           <WixImage
             mediaIdentifier={item.image}
-            width={110}
-            height={110}
             alt={item.productName?.translated || "Product image"}
-            className="bg-secondary flex-none"
+            className="size-[100px] object-cover bg-secondary flex-none"
           />
         </Link>
         <button

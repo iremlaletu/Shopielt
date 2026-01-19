@@ -27,8 +27,7 @@ export default function ProductMedia({ media }: ProductMediaProps) {
           <WixImage
             mediaIdentifier={selectedImage.url}
             alt={selectedImage.altText}
-            width={1000}
-            height={1000}
+            className="w-full h-full object-cover"
           />
         ) : selectedVideo?.url ? (
           <div className="flex size-full items-center bg-black">
@@ -84,8 +83,7 @@ function MediaPreview({ mediaItem, isSelected, onSelect }: MediaPreviewProps) {
       <WixImage
         mediaIdentifier={imageUrl || resolvedThumbnailUrl}
         alt={mediaItem.image?.altText || mediaItem.video?.files?.[0].altText}
-        width={100}
-        height={100}
+        className="size-[100px] object-cover"
         onMouseEnter={onSelect}
       />
       {resolvedThumbnailUrl && (

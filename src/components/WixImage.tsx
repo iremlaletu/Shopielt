@@ -3,21 +3,12 @@ import { ImgHTMLAttributes } from "react";
 
 type WixImageProps = Omit<
   ImgHTMLAttributes<HTMLImageElement>,
-  "src" | "width" | "height" | "alt"
+  "src" | "alt"
 > & {
   mediaIdentifier: string | undefined;
   placeholder?: string;
   alt?: string | null | undefined;
-} & (
-    | {
-        scaleToFill?: true;
-        width: number;
-        height: number;
-      }
-    | {
-        scaleToFill: false;
-      }
-  );
+};
 
 export default function WixImage({
   mediaIdentifier,
@@ -26,14 +17,7 @@ export default function WixImage({
   ...props
 }: WixImageProps) {
   const imageUrl = mediaIdentifier
-    ? props.scaleToFill || props.scaleToFill === undefined
-      ? wixMedia.getScaledToFillImageUrl(
-          mediaIdentifier,
-          props.width,
-          props.height,
-          {},
-        )
-      : wixMedia.getImageUrl(mediaIdentifier).url
+    ? wixMedia.getImageUrl(mediaIdentifier).url
     : placeholder;
 
   // eslint-disable-next-line @next/next/no-img-element

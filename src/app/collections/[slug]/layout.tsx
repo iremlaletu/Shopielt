@@ -37,12 +37,13 @@ async function CollectionsLayout(props: LayoutProps) {
     <main className="mx-auto max-w-7xl space-y-10 px-5 py-10">
       <div className="flex flex-col gap-10">
         {banner && (
-          <div className="relative hidden sm:block">
+          <div className="relative hidden sm:block w-full aspect-[1280/400] max-h-[400px]">
             <WixImage
               mediaIdentifier={banner.url}
               width={1280}
               height={400}
               alt={banner.altText}
+              className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
             <h1 className="absolute bottom-10 left-1/2 -translate-x-1/2 text-4xl font-bold text-white lg:text-5xl">
