@@ -12,7 +12,7 @@ export const getWixServerClient = cache(async () => {
   try {
     const cookieStore = await cookies(); // after next.js 15 you have to await first
     tokens = JSON.parse(cookieStore.get(WIX_SESSION_COOKIE)?.value || "{}");
-  } catch (error) {
+  } catch {
     // if the token not exist middleware will create visitor tokens
   }
   return getWixClient(tokens);

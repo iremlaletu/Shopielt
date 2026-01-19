@@ -11,9 +11,7 @@ export function useCreateBackInStockNotificationRequest() {
     mutationFn: (values: BackInStockNotificationRequestValues) =>
       createBackInStockNotificationRequest(wixBrowserClient, values),
     onError(error) {
-      
       if (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (error as any).details.applicationError.code ===
         "BACK_IN_STOCK_NOTIFICATION_REQUEST_ALREADY_EXISTS"
       ) {

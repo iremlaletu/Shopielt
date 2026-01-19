@@ -1,4 +1,57 @@
 
+### Overview
+
+Shopilet is an e-commerce application built with **Next.js 15**, integrating with **Wix Studio** to explore shopping flows and frontend architecture.
+
+The project covers common e-commerce concerns such as authentication and session persistence, shopping cart behavior for anonymous and registered users, moderated product reviews with media uploads, and product lifecycle management including variants and inventory.
+
+It also focuses on data fetching and caching strategies, URL driven filtering and pagination, form validation, and performance oriented loading patterns using Next js features.
+
+
+### Tech Stack
+
+##### Core
+- **Next.js 15** (App Router, Server Components, Streaming)
+- **React 19**
+- **TypeScript**
+
+##### State & Data
+- **React Query (TanStack Query)** caching, optimistic updates, infinite queries
+- URL based state management using search params and `useOptimistic`
+- Server-side pagination using `searchParams`
+
+##### Backend / Integrations
+- **Wix Studio SDK & APIs**
+  - Products, collections, inventory
+  - Members & authentication
+  - Reviews & moderation
+  - Recommendations
+- Server Actions & API Routes for secure backend operations
+
+##### Forms & Validation
+- **React Hook Form**
+- **Zod** (schema-based validation with custom refinements)
+- **T3 Env** for environment variable validation and type safety
+
+##### UI & Styling
+- **Tailwind CSS**
+- Skeleton loaders & loading states via `loading.tsx`
+- Suspense boundaries for streaming UX
+
+##### Performance & Caching
+- **React `cache()`** for request-level memoization
+- **Next.js experimental `staleTimes`**
+- Optimized server fetch patterns to reduce redundant API calls
+
+##### Tooling
+- **ESLint**
+- **Prettier**
+
+---
+
+### Implementation Details
+
+
 <details>
 <summary><strong>Environment Validation (T3 Env + Zod)</strong></summary>
 

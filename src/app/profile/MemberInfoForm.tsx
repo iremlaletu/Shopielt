@@ -27,7 +27,6 @@ import { UpdateMemberInfoValues } from "@/wix-api/members";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { members } from "@wix/members";
 import { MapPin, Trash2, User } from "lucide-react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
