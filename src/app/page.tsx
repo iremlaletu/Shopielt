@@ -1,7 +1,6 @@
 import HeroCarousel from "@/components/HeroCarousel";
 import Product from "@/components/Product";
 import ProductSkeleton from "@/components/ProductSkeleton";
-import { delay } from "@/lib/utils";
 import { getWixServerClient } from "@/lib/wix-client.server";
 import { getCollectionsBySlug} from "@/wix-api/collections";
 import { queryProducts } from "@/wix-api/products";
@@ -22,8 +21,7 @@ export default function Home() {
 // I put sepereate files for each api call to keep the code clean and easy to reuse with slug.
 
 async function FeaturedProducts() {
-  await delay(1000);
-
+  
   const wixClient = await getWixServerClient()
 
   const collection = await getCollectionsBySlug( wixClient, "featured");

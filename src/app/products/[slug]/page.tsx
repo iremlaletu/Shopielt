@@ -50,8 +50,6 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  await delay(1000);
-
   const { slug } = await params;
   const wix = await getWixServerClient();
   const product = await getProductBySlug(wix, slug);
@@ -129,7 +127,7 @@ async function ProductReviewSection({ product }: ProductReviewSectionProps) {
       })).items[0]
     : null;
 
-  await delay(5000);
+  await delay(1000);
   return (
     <div className="space-y-8">
       <CreateProductReviewButton

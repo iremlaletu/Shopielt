@@ -103,7 +103,7 @@ export default function MainNavigation({ className, collections }: Props) {
             <ul className="grid w-[260px] gap-2 p-2">
               <li>
                 <NavigationMenuLink asChild>
-                  <Link href="/sale" className="hover:bg-accent rounded-md p-2">
+                  <Link href="/" className="hover:bg-accent rounded-md p-2">
                     All Sales
                   </Link>
                 </NavigationMenuLink>
@@ -111,7 +111,7 @@ export default function MainNavigation({ className, collections }: Props) {
               <li>
                 <NavigationMenuLink asChild>
                   <Link
-                    href="/sale/flash"
+                    href="/"
                     className="hover:bg-accent rounded-md p-2"
                   >
                     Flash Deals
@@ -121,7 +121,7 @@ export default function MainNavigation({ className, collections }: Props) {
               <li>
                 <NavigationMenuLink asChild>
                   <Link
-                    href="/sale/clearance"
+                    href="/"
                     className="hover:bg-accent rounded-md p-2"
                   >
                     Last Chance
@@ -140,7 +140,7 @@ export default function MainNavigation({ className, collections }: Props) {
               <li>
                 <NavigationMenuLink asChild>
                   <Link
-                    href="/support"
+                    href="/faq"
                     className="hover:bg-accent flex flex-row items-start gap-2 rounded-md p-2"
                   >
                     <CircleHelp className="mt-0.5 size-4" />

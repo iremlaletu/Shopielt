@@ -132,10 +132,10 @@ export default function ShoppingCartButton({
             />
           </div>
           <Button asChild variant="outline" size="lg">
-              <Link href="/democheckout">
-                View a sample custom checkout UI (no backend)
-              </Link>
-            </Button>
+            <Link href="/democheckout">
+              View a sample custom checkout UI (no backend)
+            </Link>
+          </Button>
         </SheetContent>
       </Sheet>
     </>
@@ -171,7 +171,7 @@ function ShoppingCartItem({
           <WixImage
             mediaIdentifier={item.image}
             alt={item.productName?.translated || "Product image"}
-            className="size-[100px] object-cover bg-secondary flex-none"
+            className="bg-secondary size-[100px] flex-none object-cover"
           />
         </Link>
         <button

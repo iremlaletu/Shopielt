@@ -396,7 +396,7 @@ function StepPayment({ hasItems }: { hasItems: boolean }) {
       <p className="text-muted-foreground">
         In a real production checkout, this step would integrate with a payment
         provider (card details, wallets, etc.) or with Wix&apos;s hosted
-        checkout. For this portfolio demo, payment is intentionally disabled—
+        checkout. For this portfolio demo, payment is intentionally disabled -
         this page only demonstrates the UI and flow.
       </p>
 

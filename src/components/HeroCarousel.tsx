@@ -4,13 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-
-{/* Autoplay({
-            delay: 6000,
-            stopOnInteraction: true,
-            stopOnMouseEnter: true,
-          }), */}
-
 import {
   Carousel,
   CarouselApi,
@@ -19,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay  from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 
 export const items = [
@@ -27,21 +21,19 @@ export const items = [
     title: "Winter Warmers",
     discountPct: 60,
     img: "https://images.pexels.com/photos/7026525/pexels-photo-7026525.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/",
   },
   {
     id: 2,
     title: "Summer Refresh",
     discountPct: 50,
     img: "https://images.pexels.com/photos/33387429/pexels-photo-33387429.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/",
+    
   },
   {
     id: 3,
     title: "Spring Reset",
     discountPct: 40,
     img: "https://images.pexels.com/photos/6220663/pexels-photo-6220663.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/",
   },
 ];
 
@@ -61,7 +53,11 @@ export default function HeroCarousel() {
     <div>
       <Carousel
         plugins={[
-          
+          Autoplay({
+            delay: 6000,
+            stopOnInteraction: true,
+            stopOnMouseEnter: true,
+          })
         ]}
         setApi={setApi}
         className="w-full"
@@ -106,12 +102,12 @@ export default function HeroCarousel() {
 
                       {/* CTAs */}
                       <div className="flex flex-wrap items-center gap-2 pt-1">
-                        <Link href={s.url} aria-label={`View ${s.title} offer`}>
+                        <Link href="/shop" aria-label={`View ${s.title} offer`}>
                           <Button size="lg" className="h-10 cursor-pointer">
                             Shop Now
                           </Button>
                         </Link>
-                        <Link href="/collections" aria-label="Browse all collections">
+                        <Link href="/" aria-label="Browse all collections">
                           <Button size="lg" variant="secondary" className="h-10 cursor-pointer">
                             View Collection
                           </Button>
