@@ -1,7 +1,7 @@
 
 ### Overview
 
-Shopilet is an e-commerce application built with **Next.js 15**, integrating with **Wix Studio** to explore shopping flows and frontend architecture.
+Shopilet is an e-commerce application built with **Next.js 15**, integrating with **Wix SDK**  to explore shopping flows and frontend architecture.
 
 The project covers common e-commerce concerns such as authentication and session persistence, shopping cart behavior for anonymous and registered users, moderated product reviews with media uploads, and product lifecycle management including variants and inventory.
 
@@ -26,6 +26,7 @@ It also focuses on data fetching and caching strategies, URL driven filtering an
   - Members & authentication
   - Reviews & moderation
   - Recommendations
+  - Authentication: JWS (signed JWT) tokens provided by Wix
 - Server Actions & API Routes for secure backend operations
 
 ##### Forms & Validation
@@ -206,5 +207,17 @@ However, this project is intended only for development/demo purposes, so no upgr
 * **The fix:** Instead of putting group on the page container, I added a lightweight data-pending="true" attribute on `<main>` and used a small global CSS rule to trigger the pulse
 
 * **TL;DR:** Avoid adding Tailwind’s generic `group` class to a parent container when child components rely on per-item `group-hover` interactions, such as product cards that swap images on hover.
+
+</details>
+
+---
+
+
+<details>
+  <summary><strong>OpenGraph Image </strong></summary>
+
+  An OpenGraph image used for sharing an individual product on social media platforms.
+
+![opengraph](assets/ogexp.png)
 
 </details>

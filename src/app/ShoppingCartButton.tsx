@@ -48,7 +48,7 @@ export default function ShoppingCartButton({
         </Button>
       </div>
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent className="flex flex-col sm:max-w-lg">
+        <SheetContent className="flex flex-col w-full sm:max-w-lg">
           <SheetHeader>
             <SheetTitle>
               Your cart

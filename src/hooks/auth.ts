@@ -1,10 +1,10 @@
 
-import { generateOAuthData, getLoginUrl, getLogoutUrl } from "@/wix-api/auth";
+import { generateOAuthData, getLoginUrl } from "@/wix-api/auth";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { wixBrowserClient } from "@/lib/wix-client.browser";
-import { WIX_OAUTH_DATA_COOKIE, WIX_SESSION_COOKIE } from "@/lib/constants";
+import { WIX_OAUTH_DATA_COOKIE } from "@/lib/constants";
 
 export default function useAuth() {
   const pathname = usePathname();
@@ -27,10 +27,9 @@ export default function useAuth() {
     }
   }
   async function logout() {
-      try {
-      const logoutUrl = await getLogoutUrl(wixBrowserClient);
-
-      Cookies.remove(WIX_SESSION_COOKIE);
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      const { logoutUrl } = await response.json();
 
       window.location.href = logoutUrl;
     } catch (error) {
