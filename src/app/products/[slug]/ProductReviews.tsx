@@ -10,7 +10,7 @@ import { reviews } from "@wix/reviews";
 import { products } from "@wix/stores";
 import { CornerDownRight, StarIcon } from "lucide-react";
 import Image from "next/image";
-import logo from "@/assets/shopieltlogo.png";
+import logo from "@/assets/de.png";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import WixImage from "@/components/WixImage";
 import {media as wixMedia} from "@wix/sdk"
@@ -144,13 +144,13 @@ function ReviewItem({
             <CornerDownRight className="size-5" />
             <Image
               src={logo}
-              alt="Shopieltlogo"
+              alt="Logo"
               width={56}
               height={28}
               className="h-auto w-auto shrink-0"
             />
 
-            <span className="font-bold">Shopielt Team</span>
+            <span className="font-bold">Daily Essentials Team</span>
           </div>
           <div className="whitespace-pre-line">{reply.message}</div>
         </div>

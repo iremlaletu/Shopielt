@@ -35,7 +35,7 @@ export default async function Navbar() {
         <div className="flex flex-wrap items-center gap-5">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.png"
+              src="/delogo.png"
               alt="Logo"
               width={100}
               height={48}
