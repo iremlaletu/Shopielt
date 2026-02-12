@@ -73,6 +73,14 @@ export default function MobileMenu({
                   Shop
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/editorial"
+                  className="font-semibold hover:underline"
+                >
+                  Editor&apos;s Picks
+                </Link>
+              </li>
               {collections.map((collection) => (
                 <li key={collection._id}>
                   <Link

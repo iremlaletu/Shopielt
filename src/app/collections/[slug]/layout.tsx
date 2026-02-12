@@ -1,7 +1,6 @@
 import ProductSkeleton from "@/components/ProductSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import WixImage from "@/components/WixImage";
-import { cn } from "@/lib/utils";
 import { getWixServerClient } from "@/lib/wix-client.server";
 import { getCollectionsBySlug } from "@/wix-api/collections";
 import { notFound } from "next/navigation";
@@ -37,7 +36,7 @@ async function CollectionsLayout(props: LayoutProps) {
     <main className="mx-auto max-w-7xl space-y-10 px-5 py-10">
       <div className="flex flex-col gap-10">
         {banner && (
-          <div className="relative hidden sm:block w-full aspect-[1280/400] max-h-[400px]">
+          <div className="relative aspect-[1280/400] max-h-[400px] w-full">
             <WixImage
               mediaIdentifier={banner.url}
               width={1280}
@@ -51,14 +50,6 @@ async function CollectionsLayout(props: LayoutProps) {
             </h1>
           </div>
         )}
-        <h1
-          className={cn(
-            "mx-auto text-3xl font-bold md:text-4xl",
-            banner && "sm:hidden",
-          )}
-        >
-          {collection.name}
-        </h1>
       </div>
       {children}
     </main>

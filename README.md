@@ -94,10 +94,8 @@ However, this project is intended only for development/demo purposes, so no upgr
 
 * **References:**
 
-  * Delete member emails (Wix Members API):
-    [https://dev.wix.com/docs/api-reference/crm/members-contacts/members/member-management/members/delete-member-emails](https://dev.wix.com/docs/api-reference/crm/members-contacts/members/member-management/members/delete-member-emails)
-  * Recommendation document reference (Wix eCommerce SDK):
-    [https://dev.wix.com/docs/sdk/backend-modules/ecom/recommendations/list-available-algorithms](https://dev.wix.com/docs/sdk/backend-modules/ecom/recommendations/list-available-algorithms)
+  * [Delete member emails Wix Members API](https://dev.wix.com/docs/api-reference/crm/members-contacts/members/member-management/members/delete-member-emails)
+  * [Recommendation document reference (Wix eCommerce SDK)](https://dev.wix.com/docs/sdk/backend-modules/ecom/recommendations/list-available-algorithms)
 
 </details>
 
@@ -108,8 +106,7 @@ However, this project is intended only for development/demo purposes, so no upgr
 - Search for **“Wix Reviews”** in **Resources → Wix App Market**, install it in the project, and follow the setup instructions.
 - In **Settings → Moderation**, enable **Images and Videos** and set **Ratings** to **All stars**.
 
-- To create reviews programmatically, follow the official Wix Reviews API documentation:  
-  https://dev.wix.com/docs/api-reference/crm/community/feedback-moderation/reviews/reviews/create-review?apiView=SDK
+- To create reviews programmatically, follow the official documentation: [Wix Reviews API](https://dev.wix.com/docs/api-reference/crm/community/feedback-moderation/reviews/reviews/create-review?apiView=SDK)
 
 ##### Media Attachments for Reviews
 
@@ -123,7 +120,7 @@ However, this project is intended only for development/demo purposes, so no upgr
 
 - Used `ky` as a lightweight HTTP client on top of native Fetch to simplify request handling, query parameters, and response parsing, and easier file upload configuration (including disabling timeouts for large or parallel uploads).
 
-- Media Attachments response reference doc: https://dev.wix.com/docs/sdk/backend-modules/reviews/reviews/create-review
+- Reference doc: [Media Attachments response](https://dev.wix.com/docs/sdk/backend-modules/reviews/reviews/create-review)
 
 ##### Review Moderation Flow
 - Reviews are **not rendered immediately** after submission.
@@ -135,6 +132,65 @@ However, this project is intended only for development/demo purposes, so no upgr
   > Your review has been submitted successfully. It will be visible once it has been approved by our team.”*
 
 - When a new review is submitted, an **email notification is automatically sent to the site administrator**, informing them that a review is awaiting approval.
+
+</details>
+
+<details>
+<summary><strong>Editors Picks Architecture</strong></summary>
+
+To create curated shopping experiences beyond traditional product collections, a custom **Editor Picks** system was implemented using **Wix CMS** and the **Wix SDK**.
+
+Instead of relying solely on store collections, this structure allows grouping products into themed setups such as:
+
+* **Minimal Workspace**
+* **Home Desk Setup**
+* **Focus Kit**
+
+These setups function as editorial product bundles designed to inspire customers and guide purchasing decisions.
+
+---
+
+#### Data Modeling
+
+A CMS collection (`APicks`) was created with the following fields:
+
+| Field | Description |
+| --- | --- |
+| **Title** | Name of the setup |
+| **Slug** | Used for dynamic routing |
+| **Description** | Editorial story behind the setup |
+| **Image** | Hero banner |
+| **Multi-reference** | Links directly to Store Products |
+
+> **Note:** The multi-reference field allows fetching all related products without duplicating product data.
+
+---
+
+#### Fetching Strategy
+
+Two cached server functions manage the data retrieval:
+
+1. **Get Editor Pick** Fetches the CMS entry by slug for dynamic pages.
+`getEditorsPickBySlug(wixClient, slug)` -> picki bulur
+2. **Get Referenced Products** Uses `queryReferenced` to retrieve products linked via the multi-reference field.
+`getEditorsPickProducts(wixClient, pickId)` -> multi-reference ile bağlı ürünleri resolve eder{ pick, products } döndür
+
+To retrieve the products linked to a specific "Editor's Pick," the queryReferenced method is called using the following parameters:
+
+```tsx
+ const res = await wixClient.items.queryReferenced(
+  "APicks",           // Source Collection
+  pickId,             // ID of the specific Pick
+  "multireference",   // The Reference Field Key
+);
+
+// The method returns a Promise that resolves to a result object containing an items array.
+return (res.items ?? []) as EditorsPickProduct[];
+```
+
+`getEditorsPickWithProductsBySlug` - one entry-point, call this in slug page
+
+**Reference Doc:** [Wix Data Types API](https://dev.wix.com/docs/api-reference/business-solutions/cms/data-types-in-wix-data)
 
 </details>
 

@@ -1,9 +1,4 @@
-"use client";
-
-import * as React from "react";
 import Link from "next/link";
-import { BadgePercent, CircleCheck, CircleHelp } from "lucide-react";
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,164 +8,90 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { collections } from "@wix/stores";
-import { useState } from "react";
+import { EditorsPickItem } from "@/wix-api/editorpicks";
+import WixImage from "@/components/WixImage";
 
 type Props = {
   className?: string;
-  collections: collections.Collection[];
+  editorsPicks: EditorsPickItem[];
 };
 
-export default function MainNavigation({ className, collections }: Props) {
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+function PickCard({ pick }: { pick: EditorsPickItem }) {
+  return (
+    <NavigationMenuLink asChild>
+      <Link href={`/editorial/${pick.slug}`} className="block">
+        <div className="group relative h-[200px] overflow-hidden rounded-3xl">
+          <WixImage
+            mediaIdentifier={pick.image_fld}
+            alt={pick.imagealttext_fld || pick.title_fld || ""}
+            className="block h-full w-full object-cover object-center transition-transform duration-500 ease-out transform-gpu group-hover:scale-[1.08]"
+          />
+
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+          <div className="absolute bottom-3 left-3 right-3 text-white">
+            <div className="text-xs tracking-[0.2em] uppercase opacity-80">
+              Editor&apos;s Pick
+            </div>
+            <div className="mt-1 text-sm font-semibold leading-tight">
+              {pick.title_fld || "Setup"}
+            </div>
+          </div>
+        </div>
+      </Link>
+    </NavigationMenuLink>
+  );
+}
+
+export default function MainNavigation({ className, editorsPicks }: Props) {
+  const picks = (editorsPicks ?? []).slice(0, 3);
+  const [p1, p2, p3] = picks;
+
   return (
     <NavigationMenu className={`${className} z-10`} viewport={false}>
       <NavigationMenuList>
-        {/* Categories */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Editorial</NavigationMenuTrigger>
+
           <NavigationMenuContent>
-            <div className="grid gap-2 p-2 md:w-[500px] lg:w-[720px] lg:grid-cols-[1fr_.8fr]">
-              {/* Left: Collections */}
-              <ul className="flex flex-col gap-1">
-                {collections.map((collection) => (
-                  <li
-                    key={collection._id}
-                    onMouseEnter={() =>
-                      setActiveImage(
-                        collection.media?.mainMedia?.image?.url || null,
-                      )
-                    }
-                    onMouseLeave={() => setActiveImage(null)}
-                  >
-                    <NavigationMenuLink asChild>
-                      <Link
-                        className="hover:bg-accent hover:text-accent-foreground flex w-full flex-col gap-1 rounded-md p-2 transition-colors"
-                        href={`/collections/${collection.slug}`}
-                      >
-                        <span className="text-sm font-medium">
-                          {collection.name}
-                        </span>
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                ))}
-              </ul>
+            <div className="grid gap-3 p-3 md:w-[560px] lg:w-[860px] lg:grid-cols-2">
+              {/* 1) Intro card */}
+              <div className="p-5">
+                <div className="mt-2 text-lg leading-snug font-semibold">
+                  Curated desk setups.
+                </div>
 
-              {/* Right: Dynamic Promo */}
-              <div
-                className="relative flex h-full w-full flex-col justify-end overflow-hidden rounded-md p-6 text-white transition-all duration-300"
-                style={{
-                  backgroundImage: activeImage
-                    ? `url(${activeImage})`
-                    : "linear-gradient(to bottom, var(--muted), var(--muted))",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70" />
+                <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                  Each pick is a complete workspace mood: a hero look + the
+                  exact products used inside it. Open a setup to shop the full
+                  list.
+                </p>
 
-                <div className="relative z-10">
-                  <div className="text-xs tracking-wide uppercase opacity-80">
-                    Featured
-                  </div>
-                  <div className="mt-2 mb-1 text-lg font-semibold">
-                    Season Sale
-                  </div>
-                  <p className="text-sm leading-tight opacity-90">
-                    Dont miss out on great deals on popular products.
-                  </p>
+                <div className="mt-4">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/editorial"
+                      className="inline-flex items-center text-sm font-medium underline underline-offset-4 hover:opacity-80"
+                    >
+                      View all setups →
+                    </Link>
+                  </NavigationMenuLink>
                 </div>
               </div>
+
+              {/* Picks */}
+              {p1 ? <PickCard pick={p1} /> : <div />}
+              {p2 ? <PickCard pick={p2} /> : <div />}
+              {p3 ? <PickCard pick={p3} /> : <div />}
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* New Arrivals */}
+        {/* Shop */}
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href="/shop">Shop</Link>
           </NavigationMenuLink>
-        </NavigationMenuItem>
-
-        {/* Sale */}
-        <NavigationMenuItem>
-          <NavigationMenuTrigger className="gap-2">
-            <BadgePercent className="size-4" />
-            Sale
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[260px] gap-2 p-2">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link href="/" className="hover:bg-accent rounded-md p-2">
-                    All Sales
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/"
-                    className="hover:bg-accent rounded-md p-2"
-                  >
-                    Flash Deals
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/"
-                    className="hover:bg-accent rounded-md p-2"
-                  >
-                    Last Chance
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        {/* Help */}
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Help</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[300px] gap-3 p-2">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/faq"
-                    className="hover:bg-accent flex flex-row items-start gap-2 rounded-md p-2"
-                  >
-                    <CircleHelp className="mt-0.5 size-4" />
-                    <div>
-                      <div className="text-sm font-medium">FAQ & Support</div>
-                      <p className="text-muted-foreground text-xs">
-                        Shipping, returns, and payment questions
-                      </p>
-                    </div>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/returns"
-                    className="hover:bg-accent flex flex-row items-start gap-2 rounded-md p-2"
-                  >
-                    <CircleCheck className="mt-0.5 size-4" />
-                    <div>
-                      <div className="text-sm font-medium">Easy Returns</div>
-                      <p className="text-muted-foreground text-xs">
-                        Free returns within 30 days
-                      </p>
-                    </div>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-            </ul>
-          </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

@@ -12,6 +12,8 @@ import { redirects } from "@wix/redirects";
 import { reviews } from "@wix/reviews";
 import { createClient, OAuthStrategy, Tokens } from "@wix/sdk";
 import { collections, products } from "@wix/stores";
+import { items } from "@wix/data";
+
 
 export function getWixClient(tokens: Tokens | undefined) {
   return createClient({
@@ -27,6 +29,8 @@ export function getWixClient(tokens: Tokens | undefined) {
       reviews,
       members,
       files,
+      items
+  
     },
     auth: OAuthStrategy({
       clientId: env.NEXT_PUBLIC_WIX_CLIENT_ID,

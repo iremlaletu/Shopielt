@@ -10,20 +10,22 @@ import MainNavigation from "./MainNavigation";
 import SearchFields from "@/components/SearchFields";
 import MobileMenu from "./MobileMenu";
 import { Suspense } from "react";
+import { getEditorsPicks} from "@/wix-api/editorpicks";
 
 export default async function Navbar() {
 
-  const wixClient = getWixServerClient();
+  const wixClient = await getWixServerClient();
   
-  const [cart, loggedInMember, collections,] = await Promise.all([
-    getCart(await wixClient),
-    getLoggedInMember(await wixClient),
-    getCollections(await wixClient),
+  const [cart, loggedInMember, collections, editorsPicks] = await Promise.all([
+    getCart(wixClient),
+    getLoggedInMember(wixClient),
+    getCollections(wixClient),
+    getEditorsPicks(wixClient)
   ]);
 
   return (
-    <header className="bg-background shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-5 p-4">
+    <header className="bg-background border-b border-border">
+      <div className="mx-auto flex items-center justify-between gap-5 py-4 px-6 sm:px-14">
         <Suspense>
           <MobileMenu
             collections={collections}
@@ -41,7 +43,7 @@ export default async function Navbar() {
               priority
             />
           </Link>
-          <MainNavigation collections={collections} className="hidden lg:flex" />
+          <MainNavigation editorsPicks={editorsPicks} className="hidden lg:flex" />
         </div>
         <SearchFields className="max-w-96 hidden lg:inline " />
         <div className="flex items-center justify-center gap-4">
