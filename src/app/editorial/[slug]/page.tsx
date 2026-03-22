@@ -1,10 +1,14 @@
 import { getWixServerClient } from "@/lib/wix-client.server";
-import { getEditorsPickWithProductsBySlug } from "@/wix-api/editorpicks";
+import {
+  EditorsPickProduct,
+  getEditorsPickWithProductsBySlug,
+} from "@/wix-api/editorpicks";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import WixImage from "@/components/WixImage";
+import { hasDiscount } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -41,6 +45,12 @@ export default async function Page({ params }: PageProps) {
   if (!data) notFound();
 
   const { pick, products } = data;
+
+  console.log(data);
+
+  function getProductPriceInfo(p: EditorsPickProduct) {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <main className="mx-auto max-w-7xl space-y-10 px-5 py-10">
@@ -109,7 +119,7 @@ export default async function Page({ params }: PageProps) {
       </section>
 
       {/* Products */}
-      
+
       <section id="products" className="space-y-4">
         <div className="flex items-end justify-between gap-4">
           <h2 className="text-xl font-semibold">Products in this setup</h2>
@@ -125,53 +135,55 @@ export default async function Page({ params }: PageProps) {
           </p>
         ) : (
           <div className="divide-y">
-            {products.map((p, index) => (
-              <Link
-                key={p._id}
-                href={`/products/${p.slug}`}
-                className="group hover:bg-muted/40 flex items-center gap-6 p-6 transition-all duration-300"
-              >
-                {/* NUMBER */}
-                <div className="text-muted-foreground w-10 text-2xl font-semibold">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
+            {products.map((p, index) => {
+              const discounted = hasDiscount(p);
 
-                {/* IMAGE */}
-                <div className="bg-muted relative h-24 w-24 shrink-0 overflow-hidden rounded-xl">
-                  <WixImage
-                    mediaIdentifier={p.mainMedia}
-                    alt={p.name}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                {/* INFO */}
-                <div className="flex flex-1 items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="leading-none font-medium">{p.name}</p>
-
-                    {p.ribbon && (
-                      <span className="text-muted-foreground text-xs">
-                        {p.ribbon}
-                      </span>
-                    )}
+              return (
+                <Link
+                  key={p._id}
+                  href={`/products/${p.slug}`}
+                  className="group hover:bg-muted/40 flex items-center gap-6 p-6 transition-all duration-300"
+                >
+                  <div className="text-muted-foreground w-10 text-2xl font-semibold">
+                    {String(index + 1).padStart(2, "0")}
                   </div>
 
-                  {/* PRICE */}
-                  <div className="text-right">
-                    <p className="font-medium">
-                      {p.formattedDiscountedPrice || p.formattedPrice}
-                    </p>
+                  <div className="bg-muted relative h-24 w-24 shrink-0 overflow-hidden rounded-xl">
+                    <WixImage
+                      mediaIdentifier={p.mainMedia}
+                      alt={p.name}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                  </div>
 
-                    {p.formattedDiscountedPrice && (
-                      <p className="text-muted-foreground text-xs line-through">
-                        {p.formattedPrice}
+                  <div className="flex flex-1 items-center justify-between">
+                    <div className="space-y-1">
+                      <p className="leading-none font-medium">{p.name}</p>
+
+                      {p.ribbon && (
+                        <span className="text-muted-foreground text-xs">
+                          {p.ribbon}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="text-right">
+                      <p className="font-medium">
+                        {discounted
+                          ? p.formattedDiscountedPrice
+                          : p.formattedPrice}
                       </p>
-                    )}
+
+                      {discounted && (
+                        <p className="text-muted-foreground text-xs line-through">
+                          {p.formattedPrice}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </section>

@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { products } from "@wix/stores";
+import { EditorsPickProduct } from "@/wix-api/editorpicks";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -89,3 +90,11 @@ export function relativeDaysTR(iso?: string | null) {
 }
 
 
+// price helper
+
+export function hasDiscount(product: EditorsPickProduct) {
+  return (
+    product.discountedPrice != null &&
+    product.discountedPrice < product.price
+  );
+}
